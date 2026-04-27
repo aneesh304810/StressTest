@@ -1,0 +1,39 @@
+# profiles.yml
+# Place at ~/.dbt/profiles.yml  OR  set DBT_PROFILES_DIR to this folder.
+# Used by all 8 stress-test scenario projects.
+#
+# Driver: dbt-oracle 1.8.3 uses python-oracledb (thin mode by default).
+# No Oracle Instant Client required for thin mode.
+# For thick mode (wallets, advanced auth): set thick_mode: true and
+# provide thick_mode_lib_dir pointing to your Instant Client directory.
+
+swp_stress:
+  target: dev
+  outputs:
+
+    dev:
+      type: oracle
+      user:     "{{ env_var('ORACLE_USER',     'dbt_stress')   }}"
+      password: "{{ env_var('ORACLE_PASSWORD', 'StressTest123') }}"
+      protocol: tcp
+      host:     "{{ env_var('ORACLE_HOST',     'localhost')    }}"
+      port:     "{{ env_var('ORACLE_PORT',     '1521') | int   }}"
+      service:  "{{ env_var('ORACLE_SERVICE',  'ORCLCDB')      }}"
+      database: "{{ env_var('ORACLE_SERVICE',  'ORCLCDB')      }}"
+      schema:   "{{ env_var('ORACLE_SCHEMA',   'STRESS_DEV')   }}"
+      threads:  4
+      # Uncomment for thick mode (Instant Client / wallet required):
+      # thick_mode: true
+      # thick_mode_lib_dir: "C:\\oracle\\instantclient_21_x"
+
+    prod:
+      type: oracle
+      user:     "{{ env_var('ORACLE_USER',     'dbt_stress')    }}"
+      password: "{{ env_var('ORACLE_PASSWORD', 'StressTest123') }}"
+      protocol: tcp
+      host:     "{{ env_var('ORACLE_HOST',     'localhost')     }}"
+      port:     "{{ env_var('ORACLE_PORT',     '1521') | int    }}"
+      service:  "{{ env_var('ORACLE_SERVICE',  'ORCLCDB')       }}"
+      database: "{{ env_var('ORACLE_SERVICE',  'ORCLCDB')       }}"
+      schema:   "{{ env_var('ORACLE_SCHEMA',   'STRESS_PROD')   }}"
+      threads:  8
